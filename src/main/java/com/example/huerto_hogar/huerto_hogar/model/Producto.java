@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import jakarta.persistence.*;
+import java.util.Set;
 import java.math.BigDecimal;
 
 @Entity
@@ -25,7 +27,7 @@ public class Producto {
     @Column(name = "id_producto")
     private String id;
 
-    @Column(name = "nombre", nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100, unique = true)
     private String nombre;
 
     @Column(name = "stock", nullable = false)
@@ -37,7 +39,10 @@ public class Producto {
     @Column(name = "precio", nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;
+
+    @OneToMany(mappedBy = "producto", fetch = FetchType.LAZY)
+    private Set<DetalleOrden> detalleOrden;
 }
